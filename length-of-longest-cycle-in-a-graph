@@ -1,0 +1,48 @@
+class Solution {
+    int maxCycle = -1;
+    int timer = 1;
+
+    public int longestCycle(int V, int[][] edges) {
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+
+        // Initialize adjacency list
+        for (int i = 0; i < V; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        // Build graph
+        for (int[] e : edges) {
+            adj.get(e[0]).add(e[1]);
+        }
+
+        int[] visit = new int[V]; // 0 = unvisited, 1 = visiting, 2 = visited
+        int[] time = new int[V];
+
+        // DFS for all nodes
+        for (int i = 0; i < V; i++) {
+            if (visit[i] == 0) {
+                dfs(i, adj, visit, time);
+            }
+        }
+
+        return maxCycle;
+    }
+
+    private void dfs(int node, ArrayList<ArrayList<Integer>> adj, int[] visit, int[] time) {
+        visit[node] = 1;
+        time[node] = timer++;
+
+        for (int nei : adj.get(node)) {
+            if (visit[nei] == 0) {
+                dfs(nei, adj, visit, time);
+            } 
+            else if (visit[nei] == 1) {
+                // Cycle found
+                int cycleLength = time[node] - time[nei] + 1;
+                maxCycle = Math.max(maxCycle, cycleLength);
+            }
+        }
+
+        visit[node] = 2; // mark as fully visited
+    }
+}
