@@ -1,0 +1,50 @@
+/**
+ * @param {number[][]} mat
+ * @returns {number}
+ */
+class Solution {
+    orangesRot(mat) {
+        let n = mat.length;
+        let m = mat[0].length;
+        
+        let queue = [];
+        let fresh = 0;
+        
+        // Step 1: Add all rotten oranges to queue & count fresh
+        for (let i = 0; i < n; i++) {
+            for (let j = 0; j < m; j++) {
+                if (mat[i][j] === 2) {
+                    queue.push([i, j, 0]); // [row, col, time]
+                }
+                if (mat[i][j] === 1) {
+                    fresh++;
+                }
+            }
+        }
+        
+        let time = 0;
+        let directions = [[1,0], [-1,0], [0,1], [0,-1]];
+        
+        // Step 2: BFS
+        while (queue.length > 0) {
+            let [r, c, t] = queue.shift();
+            time = Math.max(time, t);
+            
+            for (let [dr, dc] of directions) {
+                let nr = r + dr;
+                let nc = c + dc;
+                
+                if (nr >= 0 && nr < n && nc >= 0 && nc < m && mat[nr][nc] === 1) {
+                    mat[nr][nc] = 2; // rot it
+                    fresh--;
+                    queue.push([nr, nc, t + 1]);
+                }
+            }
+        }
+        
+        // Step 3: Check if all fresh oranges are rotten
+        if (fresh > 0) return -1;
+        
+        return time;
+    }
+}
