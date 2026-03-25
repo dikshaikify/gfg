@@ -1,0 +1,54 @@
+import java.util.*;
+
+class Solution {
+    public int countPaths(int V, int[][] roads) {
+        int mod = (int)1e9 + 7;
+
+        // Step 1: Create graph
+        List<List<int[]>> graph = new ArrayList<>();
+        for (int i = 0; i < V; i++) graph.add(new ArrayList<>());
+
+        for (int[] r : roads) {
+            graph.get(r[0]).add(new int[]{r[1], r[2]});
+            graph.get(r[1]).add(new int[]{r[0], r[2]});
+        }
+
+        // Step 2: Distance and ways array
+        long[] dist = new long[V];
+        Arrays.fill(dist, Long.MAX_VALUE);
+
+        int[] ways = new int[V];
+
+        // Step 3: Min heap (distance, node)
+        PriorityQueue<long[]> pq = new PriorityQueue<>((a, b) -> Long.compare(a[0], b[0]));
+
+        dist[0] = 0;
+        ways[0] = 1;
+        pq.add(new long[]{0, 0});
+
+        // Step 4: Dijkstra
+        while (!pq.isEmpty()) {
+            long[] curr = pq.poll();
+            long d = curr[0];
+            int node = (int) curr[1];
+
+            for (int[] nei : graph.get(node)) {
+                int adj = nei[0];
+                long wt = nei[1];
+
+                // Found shorter path
+                if (d + wt < dist[adj]) {
+                    dist[adj] = d + wt;
+                    ways[adj] = ways[node];
+                    pq.add(new long[]{dist[adj], adj});
+                }
+                // Found another shortest path
+                else if (d + wt == dist[adj]) {
+                    ways[adj] = (ways[adj] + ways[node]) % mod;
+                }
+            }
+        }
+
+        return ways[V - 1];
+    }
+}
