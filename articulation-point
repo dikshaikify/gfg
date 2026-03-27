@@ -1,0 +1,52 @@
+class Solution:
+    def articulationPoints(self, V, edges):
+        from collections import defaultdict
+        
+        # Step 1: Build graph
+        adj = defaultdict(list)
+        for u, v in edges:
+            adj[u].append(v)
+            adj[v].append(u)
+        
+        visited = [False] * V
+        tin = [-1] * V
+        low = [-1] * V
+        timer = [0]
+        result = set()
+        
+        def dfs(node, parent):
+            visited[node] = True
+            tin[node] = low[node] = timer[0]
+            timer[0] += 1
+            children = 0
+            
+            for nei in adj[node]:
+                if nei == parent:
+                    continue
+                
+                if not visited[nei]:
+                    dfs(nei, node)
+                    low[node] = min(low[node], low[nei])
+                    
+                    # Condition 1: non-root
+                    if parent != -1 and low[nei] >= tin[node]:
+                        result.add(node)
+                    
+                    children += 1
+                else:
+                    low[node] = min(low[node], tin[nei])
+            
+            # Condition 2: root
+            if parent == -1 and children > 1:
+                result.add(node)
+        
+        # Run DFS for all components
+        for i in range(V):
+            if not visited[i]:
+                dfs(i, -1)
+        
+        # If no articulation point
+        if not result:
+            return [-1]
+        
+        return sorted(result)
