@@ -1,0 +1,33 @@
+class Solution:
+    def minCost(self, houses: list[list[int]]) -> int:
+        n = len(houses)
+        if n <= 1:
+            return 0
+        
+        # min_dist[i] stores the minimum cost to connect house i to the MST
+        min_dist = [float('inf')] * n
+        min_dist[0] = 0
+        visited = [False] * n
+        total_cost = 0
+        
+        for _ in range(n):
+            # Find the unvisited node with the smallest distance to the MST
+            u = -1
+            for i in range(n):
+                if not visited[i] and (u == -1 or min_dist[i] < min_dist[u]):
+                    u = i
+            
+            # Add this node to the MST
+            visited[u] = True
+            total_cost += min_dist[u]
+            
+            # Update distances to all other unvisited nodes
+            curr_x, curr_y = houses[u]
+            for v in range(n):
+                if not visited[v]:
+                    # Manhattan Distance: |x1 - x2| + |y1 - y2|
+                    dist = abs(curr_x - houses[v][0]) + abs(curr_y - houses[v][1])
+                    if dist < min_dist[v]:
+                        min_dist[v] = dist
+                        
+        return total_cost
