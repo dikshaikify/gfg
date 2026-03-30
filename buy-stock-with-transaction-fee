@@ -1,0 +1,19 @@
+class Solution:
+    def maxProfit(self, arr, k):
+        # Initial states
+        # 'hold' is negative because we spend money to buy the first stock
+        # 'free' is 0 because we start with no profit and no stock
+        hold = -arr[0]
+        free = 0
+        
+        for i in range(1, len(arr)):
+            # Update 'free' state: 
+            # Max of (staying free, or selling the stock we held)
+            # Fee is deducted during the sale
+            free = max(free, hold + arr[i] - k)
+            
+            # Update 'hold' state:
+            # Max of (keeping the current stock, or buying a new one)
+            hold = max(hold, free - arr[i])
+            
+        return free
