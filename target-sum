@@ -1,0 +1,24 @@
+class Solution:
+    def totalWays(self, arr, target):
+        totalSum = sum(arr)
+        
+        # Checking if the target is achievable
+        if (target + totalSum) % 2 != 0 or abs(target) > totalSum:
+            return 0
+            
+        subsetSum = (target + totalSum) // 2
+        
+        # DP to find the number of ways to reach subsetSum
+        return self.countSubsets(arr, subsetSum)
+
+    def countSubsets(self, nums, s):
+        # dp[i] will store the number of ways to get sum 'i'
+        dp = [0] * (s + 1)
+        dp[0] = 1  # There is 1 way to make a sum of 0 (empty subset)
+        
+        for num in nums:
+            # Iterate backwards to ensure we use each element only once
+            for j in range(s, num - 1, -1):
+                dp[j] += dp[j - num]
+        
+        return dp[s]
