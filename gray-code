@@ -1,0 +1,9 @@
+class Solution:
+    def graycode(self, n):
+        result = []
+        for i in range(1 << n):
+            gray = i ^ (i >> 1)
+            # convert to binary and pad with leading zeros
+            binary = format(gray, '0{}b'.format(n))
+            result.append(binary)
+        return result
