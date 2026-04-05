@@ -1,0 +1,63 @@
+import heapq
+
+class Node:
+    def __init__(self, freq, char=None, left=None, right=None, idx=0):
+        self.freq = freq
+        self.char = char
+        self.left = left
+        self.right = right
+        self.idx = idx  # for tie-breaking
+
+    def __lt__(self, other):
+        # first compare frequency
+        if self.freq == other.freq:
+            return self.idx < other.idx
+        return self.freq < other.freq
+
+
+class Solution:
+    def huffmanCodes(self, s, f):
+        n = len(s)
+
+        # Edge case: single character
+        if n == 1:
+            return ["0"]
+
+        heap = []
+        
+        # Step 1: push all nodes
+        for i in range(n):
+            heapq.heappush(heap, Node(f[i], s[i], idx=i))
+
+        idx_counter = n
+
+        # Step 2: build Huffman tree
+        while len(heap) > 1:
+            left = heapq.heappop(heap)
+            right = heapq.heappop(heap)
+
+            merged = Node(left.freq + right.freq, None, left, right, idx_counter)
+            idx_counter += 1
+
+            heapq.heappush(heap, merged)
+
+        root = heap[0]
+
+        # Step 3: preorder traversal to get codes
+        result = []
+
+        def preorder(node, code):
+            if not node:
+                return
+
+            # Leaf node
+            if node.char is not None:
+                result.append(code)
+                return
+
+            preorder(node.left, code + "0")
+            preorder(node.right, code + "1")
+
+        preorder(root, "")
+
+        return result
