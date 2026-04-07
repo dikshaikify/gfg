@@ -1,0 +1,62 @@
+import java.util.*;
+
+class Solution {
+    public int[] stableMarriage(int[][] men, int[][] women) {
+        int n = men.length;
+
+        // Result: womanPartner[w] = m (which man is matched to woman w)
+        int[] womanPartner = new int[n];
+        Arrays.fill(womanPartner, -1);
+
+        // Tracks if man is free
+        boolean[] freeMan = new boolean[n];
+        Arrays.fill(freeMan, true);
+
+        // Next woman to propose for each man
+        int[] nextProposal = new int[n];
+
+        // Rank of men for each woman (for fast comparison)
+        int[][] rank = new int[n][n];
+        for (int w = 0; w < n; w++) {
+            for (int i = 0; i < n; i++) {
+                rank[w][women[w][i]] = i;
+            }
+        }
+
+        int freeCount = n;
+
+        while (freeCount > 0) {
+            int m;
+            for (m = 0; m < n; m++) {
+                if (freeMan[m]) break;
+            }
+
+            int w = men[m][nextProposal[m]];
+            nextProposal[m]++;
+
+            if (womanPartner[w] == -1) {
+                // Woman is free
+                womanPartner[w] = m;
+                freeMan[m] = false;
+                freeCount--;
+            } else {
+                int m1 = womanPartner[w];
+
+                // Check if woman prefers new man
+                if (rank[w][m] < rank[w][m1]) {
+                    womanPartner[w] = m;
+                    freeMan[m] = false;
+                    freeMan[m1] = true;
+                }
+            }
+        }
+
+        // Convert to man -> woman mapping
+        int[] result = new int[n];
+        for (int w = 0; w < n; w++) {
+            result[womanPartner[w]] = w;
+        }
+
+        return result;
+    }
+}
