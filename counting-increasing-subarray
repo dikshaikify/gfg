@@ -1,0 +1,25 @@
+class Solution {
+    public int countIncreasing(int[] arr) {
+        int n = arr.length;
+        int count = 0;
+        int len = 1; // Current length of increasing sequence
+
+        for (int i = 0; i < n - 1; i++) {
+            // Check if the next element continues the increasing trend
+            if (arr[i + 1] > arr[i]) {
+                len++;
+            } else {
+                // Add the number of subarrays from the previous sequence
+                count += (len * (len - 1)) / 2;
+                len = 1; // Reset length
+            }
+        }
+
+        // Add the subarrays for the final sequence
+        if (len > 1) {
+            count += (len * (len - 1)) / 2;
+        }
+
+        return count;
+    }
+}
