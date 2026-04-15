@@ -1,0 +1,21 @@
+class Solution:
+    def URLify(self, s): 
+        return s.replace(" ", "%20")
+
+
+and 
+
+
+
+
+class Solution:
+    def URLify(self, s): 
+        res = []
+        
+        for ch in s:
+            if ch == ' ':
+                res.append('%20')
+            else:
+                res.append(ch)
+        
+        return ''.join(res)
