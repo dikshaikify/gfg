@@ -1,0 +1,77 @@
+//python//
+class Solution:
+    def maxOnes(self, arr):
+        # Count existing 1s
+        ones = arr.count(1)
+
+        # Kadane's Algorithm to find maximum gain
+        curr_gain = 0
+        max_gain = 0
+
+        for num in arr:
+            # If 0 -> gain +1, if 1 -> loss -1
+            value = 1 if num == 0 else -1
+
+            curr_gain = max(value, curr_gain + value)
+            max_gain = max(max_gain, curr_gain)
+
+        return ones + max_gain
+
+//java//
+class Solution {
+    int maxOnes(int[] arr) {
+        
+        int ones = 0;
+        
+        // Count original 1s
+        for (int num : arr) {
+            if (num == 1) {
+                ones++;
+            }
+        }
+
+        // Kadane's Algorithm for maximum gain
+        int currGain = 0;
+        int maxGain = 0;
+
+        for (int num : arr) {
+            
+            // 0 gives +1 gain, 1 gives -1 loss
+            int value = (num == 0) ? 1 : -1;
+
+            currGain = Math.max(value, currGain + value);
+            maxGain = Math.max(maxGain, currGain);
+        }
+
+        return ones + maxGain;
+    }
+}
+
+//javascript//
+/**
+ * @param {number[]} arr
+ * @returns {number}
+ */
+class Solution {
+    maxOnes(arr) {
+        let countOnes = 0;
+
+        // Count original 1s
+        for (let num of arr) {
+            if (num === 1) countOnes++;
+        }
+
+        // Kadane's Algorithm
+        let currGain = 0;
+        let maxGain = 0;
+
+        for (let num of arr) {
+            let value = (num === 0) ? 1 : -1;
+
+            currGain = Math.max(value, currGain + value);
+            maxGain = Math.max(maxGain, currGain);
+        }
+
+        return countOnes + maxGain;
+    }
+}
