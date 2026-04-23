@@ -1,0 +1,35 @@
+class Solution {
+    public boolean canSplit(int arr[]) {
+        int totalSum = 0;
+        
+        // Step 1: Calculate the total sum of the array
+        for (int num : arr) {
+            totalSum += num;
+        }
+        
+        // Step 2: If the sum is odd, we can't split it into two equal integers
+        if (totalSum % 2 != 0) {
+            return false;
+        }
+        
+        int target = totalSum / 2;
+        int runningSum = 0;
+        
+        // Step 3: Iterate to find if any prefix sum equals exactly half
+        for (int num : arr) {
+            runningSum += num;
+            
+            if (runningSum == target) {
+                return true;
+            }
+            
+            // Optimization: If runningSum exceeds target, no need to check further
+            // (Only works if all array elements are non-negative)
+            if (runningSum > target) {
+                // If the array contains negative numbers, remove this 'if' block
+            }
+        }
+        
+        return false;
+    }
+}
