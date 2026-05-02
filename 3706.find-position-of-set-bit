@@ -1,0 +1,25 @@
+class Solution {
+    public int findPosition(int n) {
+        // Case: No bits set or n is 0
+        if (n <= 0) {
+            return -1;
+        }
+
+        // Check if n has exactly one set bit
+        // A power of 2 has exactly one bit set.
+        if ((n & (n - 1)) != 0) {
+            return -1;
+        }
+
+        // Calculate the position using log2
+        // Position is 1 + log2(n)
+        int position = 0;
+        int temp = n;
+        while (temp > 0) {
+            temp >>= 1;
+            position++;
+        }
+        
+        return position;
+    }
+}
