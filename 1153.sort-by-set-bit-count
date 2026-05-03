@@ -1,0 +1,42 @@
+import java.util.*;
+
+class Solution {
+
+    static class Pair {
+        int value;
+        int bits;
+        int index;
+
+        Pair(int v, int b, int i) {
+            value = v;
+            bits = b;
+            index = i;
+        }
+    }
+
+    ArrayList<Integer> sortBySetBitCount(int[] arr) {
+        int n = arr.length;
+
+        Pair[] temp = new Pair[n];
+
+        // Step 1: Store values
+        for (int i = 0; i < n; i++) {
+            temp[i] = new Pair(arr[i], Integer.bitCount(arr[i]), i);
+        }
+
+        // Step 2: Sort
+        Arrays.sort(temp, (a, b) -> {
+            if (b.bits != a.bits)
+                return b.bits - a.bits;
+            return a.index - b.index;
+        });
+
+        // Step 3: Convert to ArrayList
+        ArrayList<Integer> result = new ArrayList<>();
+        for (Pair p : temp) {
+            result.add(p.value);
+        }
+
+        return result;
+    }
+}
