@@ -1,0 +1,29 @@
+class Solution {
+    static long isPallindrome(long N) {
+        
+        // Find number of bits
+        int left = 63; // max bits for long
+        
+        // Find actual MSB (most significant bit)
+        while (left > 0 && ((N >> left) & 1) == 0) {
+            left--;
+        }
+        
+        int right = 0;
+        
+        // Compare bits from both ends
+        while (left > right) {
+            long leftBit = (N >> left) & 1;
+            long rightBit = (N >> right) & 1;
+            
+            if (leftBit != rightBit) {
+                return 0;
+            }
+            
+            left--;
+            right++;
+        }
+        
+        return 1;
+    }
+}
