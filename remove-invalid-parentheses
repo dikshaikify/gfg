@@ -1,0 +1,78 @@
+import java.util.*;
+
+class Solution {
+
+    public List<String> validParenthesis(String s) {
+
+        List<String> ans = new ArrayList<>();
+
+        // BFS for minimum removals
+        Queue<String> q = new LinkedList<>();
+        Set<String> visited = new HashSet<>();
+
+        q.offer(s);
+        visited.add(s);
+
+        boolean found = false;
+
+        while (!q.isEmpty()) {
+
+            String curr = q.poll();
+
+            // If valid, add to answer
+            if (isValid(curr)) {
+                ans.add(curr);
+                found = true;
+            }
+
+            // Stop generating deeper levels
+            // because BFS guarantees minimum removals
+            if (found) continue;
+
+            for (int i = 0; i < curr.length(); i++) {
+
+                char ch = curr.charAt(i);
+
+                // Only remove parentheses
+                if (ch != '(' && ch != ')')
+                    continue;
+
+                String next =
+                        curr.substring(0, i) +
+                        curr.substring(i + 1);
+
+                if (!visited.contains(next)) {
+                    visited.add(next);
+                    q.offer(next);
+                }
+            }
+        }
+
+        // Remove duplicates and sort lexicographically
+        Set<String> set = new TreeSet<>(ans);
+
+        return new ArrayList<>(set);
+    }
+
+    // Check if parentheses string is valid
+    private boolean isValid(String s) {
+
+        int balance = 0;
+
+        for (char ch : s.toCharArray()) {
+
+            if (ch == '(') {
+                balance++;
+            }
+            else if (ch == ')') {
+
+                if (balance == 0)
+                    return false;
+
+                balance--;
+            }
+        }
+
+        return balance == 0;
+    }
+}
