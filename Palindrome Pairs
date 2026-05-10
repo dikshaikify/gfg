@@ -1,0 +1,63 @@
+class Solution {
+    
+    // Check palindrome in O(len)
+    private boolean isPalindrome(String s, int l, int r) {
+        while (l < r) {
+            if (s.charAt(l++) != s.charAt(r--))
+                return false;
+        }
+        return true;
+    }
+
+    public boolean palindromePair(String[] arr) {
+        
+        int n = arr.length;
+        
+        // reverse string -> index
+        HashMap<String, Integer> map = new HashMap<>();
+        
+        for (int i = 0; i < n; i++) {
+            String rev = new StringBuilder(arr[i]).reverse().toString();
+            map.put(rev, i);
+        }
+
+        for (int i = 0; i < n; i++) {
+            String s = arr[i];
+            int m = s.length();
+
+            // split into prefix + suffix
+            for (int j = 0; j <= m; j++) {
+
+                // prefix = s[0...j-1]
+                // suffix = s[j...m-1]
+
+                // Case 1:
+                // If prefix is palindrome,
+                // find reverse(suffix)
+                if (isPalindrome(s, 0, j - 1)) {
+                    String suffix = s.substring(j);
+
+                    Integer idx = map.get(suffix);
+
+                    if (idx != null && idx != i)
+                        return true;
+                }
+
+                // Case 2:
+                // If suffix is palindrome,
+                // find reverse(prefix)
+                // j != m avoids duplicate checking
+                if (j != m && isPalindrome(s, j, m - 1)) {
+                    String prefix = s.substring(0, j);
+
+                    Integer idx = map.get(prefix);
+
+                    if (idx != null && idx != i)
+                        return true;
+                }
+            }
+        }
+
+        return false;
+    }
+}
