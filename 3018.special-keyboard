@@ -1,0 +1,24 @@
+class Solution {
+    public int optimalKeys(int n) {
+        
+        // dp[i] = maximum number of A's possible with i key presses
+        int[] dp = new int[n + 1];
+        
+        for (int i = 1; i <= n; i++) {
+            
+            // Pressing 'A'
+            dp[i] = dp[i - 1] + 1;
+            
+            // Try all possible break points
+            for (int j = 3; j < i; j++) {
+                
+                // At step j:
+                // Ctrl+A, Ctrl+C take 2 steps
+                // Remaining (i - j) steps are Ctrl+V
+                dp[i] = Math.max(dp[i], dp[j - 2] * (i - j + 1));
+            }
+        }
+        
+        return dp[n];
+    }
+}
